@@ -155,24 +155,27 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
-async function fetchQuotesFromServer() {
+async function sendQuoteToServer(quote) {
     try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        const posts = await response.json();
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quote)
+        });
         
-        const serverQuotes = posts.slice(0, 5).map(post => ({
-            text: post.title,
-            category: 'server',
-            author: 'Server User ' + post.userId,
-            id: post.id + 1000,
-            timestamp: Date.now() - Math.random() * 86400000
-        }));
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
         
-        return serverQuotes;
+        const data = await response.json();
+        showNotification('Quote successfully sent to server', 'success');
+        return data;
     } catch (error) {
-        console.error('Error fetching quotes from server:', error);
-        showNotification('Failed to sync with server', 'error');
-        return [];
+        console.error('Error sending quote to server:', error);
+        showNotification('Failed to send quote to server', 'error');
+        return null;
     }
 }
 
