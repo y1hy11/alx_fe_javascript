@@ -304,14 +304,18 @@ async function syncQuotes() {
         const conflictResolution = resolveConflicts(serverQuotes);
         
         if (conflictResolution.conflicts.length > 0) {
+            alert('Conflicts found during sync!');
             showConflictResolution(conflictResolution);
         } else if (conflictResolution.newQuotes.length > 0) {
             mergeQuotes(conflictResolution.newQuotes);
+            alert('New quotes synced successfully!');
             showNotification('Quotes synced with server!', 'success');
         } else {
+            alert('No new quotes found');
             showNotification('No new quotes to sync', 'info');
         }
     } else {
+        alert('Server has no quotes');
         showNotification('No quotes available from server', 'info');
     }
 }
