@@ -307,10 +307,12 @@ async function syncQuotes() {
             showConflictResolution(conflictResolution);
         } else if (conflictResolution.newQuotes.length > 0) {
             mergeQuotes(conflictResolution.newQuotes);
-            showNotification(`Synced ${conflictResolution.newQuotes.length} new quotes from server!`, 'success');
+            showNotification('Quotes synced with server!', 'success');
         } else {
             showNotification('No new quotes to sync', 'info');
         }
+    } else {
+        showNotification('No quotes available from server', 'info');
     }
 }
 
